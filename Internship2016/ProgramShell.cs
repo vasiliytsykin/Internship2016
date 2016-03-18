@@ -1,15 +1,15 @@
-﻿using System;
-
-namespace Internship2016
+﻿namespace Internship2016
 {
 	public class ProgramShell
 	{
-		GameWorld currentGame;
-		InputOutput IO;
-		bool exit;
+		private GameData gameData;
+		private GameLogic gameLogic;
+		private InputOutput IO;
+		private bool exit;
 
 		public ProgramShell ()
 		{
+			gameLogic = new GameLogic ();
 			IO = new InputOutput ();
 			IO.StartNewGame += StartGame;
 			IO.MakeNextMove += MakeNextMove;
@@ -18,20 +18,19 @@ namespace Internship2016
 
 		void StartGame (Card[] deck)
 		{
-			currentGame = new GameWorld (deck, 5);
-			currentGame.GameOver += FinishGame;
+			gameData = new GameData ();
+			gameLogic.DealCards (deck, 5, gameData);
 		}
 
 		void FinishGame(int turn, int score, int withRisk)
 		{
-			IO.Write (turn, score, withRisk);
-			currentGame = null;
+			IO.PrintGameResult (turn, score, withRisk);
 		}
 
 		void MakeNextMove (Move move)
 		{
-			if (currentGame != null)
-				currentGame.TryMakeMove (move);
+			if (!gameLogic.TryMakeMove (move, gameData)) 
+				FinishGame (gameData.CurrentTurn, gameData.CurrentScore, gameData.WithRiskMoves);
 		}
 
 		void Exit()

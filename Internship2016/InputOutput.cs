@@ -10,7 +10,6 @@ namespace Internship2016
 		public event Action<Move> MakeNextMove;
 		public event Action Exit;
 
-		string nextCommand;
 		InputConverter converter;
 
 		StreamReader reader;
@@ -24,9 +23,9 @@ namespace Internship2016
 
 		public void Read()
 		{
-			//nextCommand = Console.ReadLine ();
-			nextCommand = reader.ReadLine();
-			if (nextCommand == null)
+			//var nextCommand = Console.ReadLine ();
+			var nextCommand = reader.ReadLine();
+			if (String.IsNullOrEmpty(nextCommand))
 				Exit ();
 			else if (nextCommand.StartsWith ("S"))
 				StartNewGame (converter.ConvertToDeck (nextCommand));
@@ -34,7 +33,7 @@ namespace Internship2016
 				MakeNextMove (converter.ConvertToMove (nextCommand));
 		}
 
-		public void Write(int turn, int score, int withRisk)
+		public void PrintGameResult(int turn, int score, int withRisk)
 		{
 			Console.WriteLine ("Turn: {0}, cards: {1}, with risk: {2}", turn, score, withRisk);
 		}

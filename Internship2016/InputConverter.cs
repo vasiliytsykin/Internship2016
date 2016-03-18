@@ -8,12 +8,13 @@ namespace Internship2016
 		
 		public Card[] ConvertToDeck(string input)
 		{
+			int id = 0;
 			return input.Split (' ')
 				.Skip (5)
 				.Select (card => {
 					var color = ConvertColor (card [0].ToString()); 
 					var rank = byte.Parse (card [1].ToString()); 
-				return new Card (color, rank);
+					return new Card (color, rank, id++);
 			}).ToArray ();
 		}
 
