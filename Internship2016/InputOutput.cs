@@ -12,19 +12,15 @@ namespace Internship2016
 
 		InputConverter converter;
 
-		StreamReader reader;
-
 		public InputOutput ()
 		{
-			reader = File.OpenText("2-big.in");
 			converter = new InputConverter ();
 		}
 
 
 		public void Read()
 		{
-			//var nextCommand = Console.ReadLine ();
-			var nextCommand = reader.ReadLine();
+			var nextCommand = Console.ReadLine ();
 			if (String.IsNullOrEmpty(nextCommand))
 				Exit ();
 			else if (nextCommand.StartsWith ("S"))
