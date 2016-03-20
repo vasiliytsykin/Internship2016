@@ -1,16 +1,16 @@
 ﻿namespace Internship2016
 {
+	
 	public class ProgramShell
 	{
-		private GameData gameData;
-		private GameLogic gameLogic;
-		private InputOutput IO;
+		private IGame game;
+		private IInputOutput IO;
 		private bool exit;
 
-		public ProgramShell ()
+		public ProgramShell (IInputOutput IO, IGame game)
 		{
-			gameLogic = new GameLogic ();
-			IO = new InputOutput ();
+			this.game = game;
+			this.IO = IO;
 			IO.StartNewGame += StartGame;
 			IO.MakeNextMove += MakeNextMove;
 			IO.Exit += Exit;
@@ -18,8 +18,7 @@
 
 		void StartGame (Card[] deck)
 		{
-			gameData = new GameData ();
-			gameLogic.DealCards (deck, 5, gameData);
+			game.InitNewGame (deck);
 		}
 
 		void FinishGame(int turn, int score, int withRisk)
@@ -29,8 +28,8 @@
 
 		void MakeNextMove (Move move)
 		{
-			if (!gameLogic.TryMakeMove (move, gameData)) 
-				FinishGame (gameData.CurrentTurn, gameData.CurrentScore, gameData.WithRiskMoves);
+			if (!game.TryMakeMove (move)) 
+				FinishGame (game.Result.Turn, game.Result.Score, game.Result.WithRisk);
 		}
 
 		void Exit()

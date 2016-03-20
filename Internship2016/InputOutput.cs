@@ -3,24 +3,33 @@ using System.IO;
 
 namespace Internship2016
 {
-	public class InputOutput
+	public interface IInputOutput
+	{
+		void Read();
+		void PrintGameResult(int turn, int score, int withRisk);
+		event Action<Card[]> StartNewGame;
+		event Action<Move> MakeNextMove;
+		event Action Exit;
+	}
+
+	public class InputOutput: IInputOutput
 	{
 
 		public event Action<Card[]> StartNewGame;
 		public event Action<Move> MakeNextMove;
 		public event Action Exit;
 
-		InputConverter converter;
+		IConverter converter;
 
-		public InputOutput ()
+		public InputOutput (IConverter converter)
 		{
-			converter = new InputConverter ();
+			this.converter = converter;
 		}
 
 
 		public void Read()
 		{
-			var nextCommand = Console.ReadLine ();
+			var nextCommand = Console.ReadLine ();		
 			if (String.IsNullOrEmpty(nextCommand))
 				Exit ();
 			else if (nextCommand.StartsWith ("S"))

@@ -4,7 +4,10 @@
 	{
 		public static void Main (string[] args)
 		{
-			var programShell = new ProgramShell ();
+			var converter = new InputConverter ();
+			var IO = new InputOutput (converter);
+			var game = new Game ();
+			var programShell = new ProgramShell (IO, game);
 			programShell.Start ();
 		}
 	}

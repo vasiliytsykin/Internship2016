@@ -3,7 +3,14 @@ using System.Linq;
 
 namespace Internship2016
 {
-	public class InputConverter
+
+	public interface IConverter
+	{
+		Card[] ConvertToDeck(string input);
+		Move ConvertToMove(string input);
+	}
+
+	public class InputConverter: IConverter
 	{
 		
 		public Card[] ConvertToDeck(string input)
@@ -46,7 +53,7 @@ namespace Internship2016
 			return new Move (moveType, appliedFor, color, rank);				
 		}
 
-		Color ConvertColor(string colorStr)
+		private Color ConvertColor(string colorStr)
 		{
 			var firstChar = colorStr [0];
 
@@ -65,7 +72,7 @@ namespace Internship2016
 			}
 		}
 
-		MoveType ConvertMoveType(string moveTypeStr)
+		private MoveType ConvertMoveType(string moveTypeStr)
 		{
 			switch (moveTypeStr) 
 			{
