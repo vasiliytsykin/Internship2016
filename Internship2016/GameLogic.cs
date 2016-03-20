@@ -39,7 +39,7 @@ namespace Internship2016
 
 		public bool TryMakeMove(Move move, GameData gameData)
 		{
-			gameData.CurrentTurn++;
+			gameData.Turn++;
 			bool successfulMove = MakeMove (move, gameData);
 			bool tableIsFull  = gameData.Table.Values.All (v => v == 5);
 			bool continueGame = successfulMove && gameData.Deck.Count != 0 && !tableIsFull;
@@ -61,9 +61,9 @@ namespace Internship2016
 			{
 				gameData.Table [cardToPlay.Color]++;
 				DropAndTakeCard (cardIndex, gameData);
-				gameData.CurrentScore++;
+				gameData.Score++;
 				if (!gameData.KnownColor.Contains (cardToPlay) || !gameData.KnownRank.Contains (cardToPlay))
-					gameData.WithRiskMoves++;
+					gameData.WithRisk++;
 				return true;
 			}
 			return false;
@@ -134,7 +134,6 @@ namespace Internship2016
 			gameData.CurrentPlayer.RemoveAt (index);
 			var nextCard = gameData.Deck.Dequeue ();
 			gameData.CurrentPlayer.Add (nextCard);
-		}
-			
+		}			
 	}
 }

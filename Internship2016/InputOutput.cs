@@ -29,7 +29,7 @@ namespace Internship2016
 
 		public void Read()
 		{
-			var nextCommand = Console.ReadLine ();		
+			var nextCommand = Console.ReadLine ();
 			if (String.IsNullOrEmpty(nextCommand))
 				Exit ();
 			else if (nextCommand.StartsWith ("S"))

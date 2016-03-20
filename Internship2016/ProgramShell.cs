@@ -5,6 +5,7 @@
 	{
 		private IGame game;
 		private IInputOutput IO;
+		private bool currentGameFinished;
 		private bool exit;
 
 		public ProgramShell (IInputOutput IO, IGame game)
@@ -16,23 +17,25 @@
 			IO.Exit += Exit;
 		}
 
-		void StartGame (Card[] deck)
+		private void StartGame (Card[] deck)
 		{
+			currentGameFinished = false;
 			game.InitNewGame (deck);
 		}
 
-		void FinishGame(int turn, int score, int withRisk)
+		private void FinishGame(int turn, int score, int withRisk)
 		{
+			currentGameFinished = true;
 			IO.PrintGameResult (turn, score, withRisk);
 		}
 
-		void MakeNextMove (Move move)
+		private void MakeNextMove (Move move)
 		{
-			if (!game.TryMakeMove (move)) 
+			if (!currentGameFinished && !game.TryMakeMove (move)) 
 				FinishGame (game.Result.Turn, game.Result.Score, game.Result.WithRisk);
 		}
 
-		void Exit()
+		private void Exit()
 		{
 			exit = true;
 		}

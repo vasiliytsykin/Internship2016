@@ -32,7 +32,7 @@
 
 		public GameResult Result 
 		{
-			get { return new GameResult (gameData.CurrentTurn, gameData.CurrentScore, gameData.WithRiskMoves); }
+			get { return new GameResult (gameData.Turn, gameData.Score, gameData.WithRisk); }
 		}
 	}
 }

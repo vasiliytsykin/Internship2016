@@ -9,9 +9,9 @@ namespace Internship2016
 		public List<Card> CurrentPlayer { get; set; }
 		public List<Card> NextPlayer { get; set; }
 		public Dictionary<Color, byte> Table { get; set; }
-		public int CurrentTurn { get; set; }
-		public int CurrentScore { get; set; }
-		public int WithRiskMoves { get; set; }
+		public int Turn { get; set; }
+		public int Score { get; set; }
+		public int WithRisk { get; set; }
 		public HashSet<Card> KnownColor { get; set; }
 		public HashSet<Card> KnownRank { get; set; }
 
