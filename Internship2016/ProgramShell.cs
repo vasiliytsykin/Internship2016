@@ -1,4 +1,6 @@
-﻿namespace Internship2016
+﻿using System;
+
+namespace Internship2016
 {
 	
 	public class ProgramShell
@@ -12,15 +14,12 @@
 		{
 			this.game = game;
 			this.IO = IO;
-			IO.StartNewGame += StartGame;
-			IO.MakeNextMove += MakeNextMove;
-			IO.Exit += Exit;
 		}
 
-		private void StartGame (Card[] deck)
+		private void StartNewGame (Card[] deck)
 		{
 			currentGameFinished = false;
-			game.InitNewGame (deck);
+			game.StartNewGame (deck);
 		}
 
 		private void FinishGame(int turn, int score, int withRisk)
@@ -29,10 +28,19 @@
 			IO.PrintGameResult (turn, score, withRisk);
 		}
 
-		private void MakeNextMove (Move move)
+		private void MakeNextMove (MoveInfo move)
 		{
-			if (!currentGameFinished && !game.TryMakeMove (move)) 
-				FinishGame (game.Result.Turn, game.Result.Score, game.Result.WithRisk);
+			if (!currentGameFinished) 
+			{
+				try 
+				{
+					game.MakeMove (move);
+				} 
+				catch (GameOverException) 
+				{
+					FinishGame (game.Result.Turn, game.Result.Score, game.Result.WithRisk);
+				}
+			}
 		}
 
 		private void Exit()
@@ -44,7 +52,14 @@
 		{
 			while (!exit) 
 			{
-				IO.Read ();
+				var nextCommand = IO.ReadNextLine ();
+
+				if (String.IsNullOrEmpty(nextCommand))
+					Exit ();
+				else if (nextCommand.StartsWith ("Start new game"))
+					StartNewGame (DeckParser.Parse (nextCommand));
+				else
+					MakeNextMove (MoveParser.Parse (nextCommand));
 			}
 		}			
 	}

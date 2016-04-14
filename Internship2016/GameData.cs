@@ -12,16 +12,15 @@ namespace Internship2016
 		public int Turn { get; set; }
 		public int Score { get; set; }
 		public int WithRisk { get; set; }
-		public HashSet<Card> KnownColor { get; set; }
-		public HashSet<Card> KnownRank { get; set; }
+
+		public Dictionary<Card, List<Color>> PossibleColor { get; set; }
+		public Dictionary<Card, List<byte>> PossibleRank { get; set; }
 
 		public GameData()
 		{
 			Deck = new Queue<Card> ();
 			CurrentPlayer = new List<Card> ();
 			NextPlayer = new List<Card> ();
-			KnownColor = new HashSet<Card>();
-			KnownRank = new HashSet<Card>();
 			Table = new Dictionary<Color, byte>() {
 				{Color.Red, 0},
 				{Color.Green, 0},
@@ -29,6 +28,8 @@ namespace Internship2016
 				{Color.White, 0},
 				{Color.Yellow, 0}
 			};
+			PossibleColor = new Dictionary<Card, List<Color>> ();
+			PossibleRank = new Dictionary<Card, List<byte>> ();
 		}
 	}
 }

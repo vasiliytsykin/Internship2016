@@ -2,9 +2,9 @@
 {
 	public class GameResult
 	{
-		public int Turn { get; private set;}
-		public int Score { get; private set;}
-		public int WithRisk { get; private set;}
+		public readonly int Turn;
+		public readonly int Score;
+		public readonly int WithRisk;
 
 		public GameResult (int turn, int score, int withRisk)
 		{

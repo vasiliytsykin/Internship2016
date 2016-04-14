@@ -4,87 +4,81 @@ using System.Linq;
 namespace Internship2016
 {
 
-	public interface IConverter
-	{
-		Card[] ConvertToDeck(string input);
-		Move ConvertToMove(string input);
-	}
-
-	public class InputConverter: IConverter
+	static class DeckParser
 	{
 		
-		public Card[] ConvertToDeck(string input)
+		public static Card[] Parse (string input)
 		{
 			int id = 0;
 			return input.Split (' ')
 				.Skip (5)
 				.Select (card => {
-					var color = ConvertColor (card [0].ToString()); 
+					var color = ColorParser.Parse (card [0].ToString()); 
 					var rank = byte.Parse (card [1].ToString()); 
 					return new Card (color, rank, id++);
-			}).ToArray ();
+				}).ToArray ();
 		}
+	}
 
-		public Move ConvertToMove(string input)
+	static class MoveParser
+	{
+		
+		public static MoveInfo Parse (string input)
 		{
 			var parts = input.Split (' ');
-			MoveType moveType;
-			Color? color = null;
-			byte? rank = null;
-			byte temp = 0;
-			byte[] appliedFor;
 
 			if (parts.Length == 3) 
-			{
-				moveType = ConvertMoveType (parts [0]);
-				appliedFor = parts.Skip (2).Select (x => byte.Parse (x)).ToArray ();
-			} 
+				return ParsePlayAndDropCommands (parts);		
+			else 
+				return ParseTellCommands (parts);						
+		}
+
+		static MoveInfo ParsePlayAndDropCommands(string[] commandParts)
+		{
+			var moveType = commandParts [0];
+			var appliedFor = commandParts.Skip (2).Select (x => byte.Parse (x)).ToArray ();
+			if (moveType == "Play")
+				return new PlayInfo (appliedFor);
+			else
+				return new DropInfo (appliedFor);
+		}
+
+		static MoveInfo ParseTellCommands(string[] commandParts)
+		{
+			byte rank = 0;
+			var appliedFor = commandParts.Skip(5).Select (x => byte.Parse (x)).ToArray ();
+			bool isNumber = byte.TryParse (commandParts [2], out rank);
+			if (isNumber)
+				return new TellRankInfo (appliedFor, rank);
 			else 
 			{
-				moveType = ConvertMoveType (parts [0] + parts [1]);
-				appliedFor = parts.Skip(5).Select (x => byte.Parse (x)).ToArray ();
-				bool isNumber = byte.TryParse (parts [2], out temp);
-				if (isNumber)
-					rank = temp;
-				else
-					color = ConvertColor (parts [2]);
+				var color = ColorParser.Parse (commandParts [2]);
+				return new TellColorInfo (appliedFor, color);
 			}
-
-			return new Move (moveType, appliedFor, color, rank);				
 		}
+			
+	}
 
-		private Color ConvertColor(string colorStr)
+
+	static class ColorParser
+	{
+
+		public static Color Parse(string colorStr)
 		{
+
 			var firstChar = colorStr [0];
 
-			switch (firstChar) 
-			{
-			case 'R':
+			if (firstChar == 'R')
 				return Color.Red;
-			case 'G':
+			else if (firstChar == 'G')
 				return Color.Green;
-			case 'B':
+			else if (firstChar == 'B')
 				return Color.Blue;
-			case 'W':
+			else if (firstChar == 'W')
 				return Color.White;
-			default:
+			else 
 				return Color.Yellow;
-			}
-		}
-
-		private MoveType ConvertMoveType(string moveTypeStr)
-		{
-			switch (moveTypeStr) 
-			{
-			case "Play":
-				return MoveType.Play;
-			case "Drop":
-				return MoveType.Drop;
-			case "Tellcolor":
-				return MoveType.TellColor;
-			default:
-				return MoveType.TellRank;
-			}
+			
 		}
 	}
 }

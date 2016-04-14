@@ -1,38 +1,30 @@
 ﻿namespace Internship2016
 {
-	public enum Color
-	{
-		Red,
-		Green,
-		Blue,
-		White,
-		Yellow
-	}
 
 	public class Card
 	{
-		public readonly Color Color;
-		public readonly byte Rank;
-		public readonly int ID;
+		public readonly Color color;
+		public readonly byte rank;
+		public readonly int id;
 
-		public Card (Color color, byte rank, int uniqueID)
+		public Card (Color color, byte rank, int id)
 		{
-			Color = color;
-			Rank = rank;
-			ID = uniqueID;
+			this.color = color;
+			this.rank = rank;
+			this.id = id;
 		}
 
 		public override bool Equals (object obj)
 		{
 			var anotherCard = obj as Card;
 			if (anotherCard != null)
-				return ID == anotherCard.ID;
+				return id == anotherCard.id;
 			return false;
 		}
 
 		public override int GetHashCode ()
 		{
-			return ID;
+			return id;
 		}
 	}
 }

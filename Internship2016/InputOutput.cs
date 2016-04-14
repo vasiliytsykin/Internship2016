@@ -5,37 +5,26 @@ namespace Internship2016
 {
 	public interface IInputOutput
 	{
-		void Read();
+		string ReadNextLine();
 		void PrintGameResult(int turn, int score, int withRisk);
-		event Action<Card[]> StartNewGame;
-		event Action<Move> MakeNextMove;
-		event Action Exit;
 	}
 
 	public class InputOutput: IInputOutput
 	{
 
-		public event Action<Card[]> StartNewGame;
-		public event Action<Move> MakeNextMove;
-		public event Action Exit;
+		StreamReader reader;
 
-		IConverter converter;
-
-		public InputOutput (IConverter converter)
+		public InputOutput ()
 		{
-			this.converter = converter;
+			reader = File.OpenText ("2-big.in");
 		}
 
 
-		public void Read()
+		public string ReadNextLine()
 		{
-			var nextCommand = Console.ReadLine ();
-			if (String.IsNullOrEmpty(nextCommand))
-				Exit ();
-			else if (nextCommand.StartsWith ("S"))
-				StartNewGame (converter.ConvertToDeck (nextCommand));
-			else
-				MakeNextMove (converter.ConvertToMove (nextCommand));
+			//var nextCommand = Console.ReadLine ();
+			var nextCommand = reader.ReadLine ();
+			return nextCommand;
 		}
 
 		public void PrintGameResult(int turn, int score, int withRisk)
